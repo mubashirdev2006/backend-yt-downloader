@@ -1,17 +1,21 @@
 FROM node:18-slim
 
-# Install dependencies
+# Install dependencies including deno for JavaScript runtime
 RUN apt-get update && \
-    apt-get install -y python3 ffmpeg wget curl && \
+    apt-get install -y python3 ffmpeg wget curl unzip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Download yt-dlp binary (no pip needed)
+# Install deno (JavaScript runtime for yt-dlp)
+RUN curl -fsSL https://deno.land/install.sh | sh && \
+    cp /root/.deno/bin/deno /usr/local/bin/deno
+
+# Download yt-dlp binary
 RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && \
     chmod a+rx /usr/local/bin/yt-dlp
 
-# Verify installation
-RUN yt-dlp --version
+# Verify installations
+RUN yt-dlp --version && deno --version
 
 WORKDIR /app
 

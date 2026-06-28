@@ -108,7 +108,7 @@ app.post('/api/info', (req, res) => {
 
     console.log(`\n🔍 Fetching info: ${url}`);
     
-    runYtDlp(`-J --no-check-certificate "${url}"`, (error, stdout, stderr) => {
+    runYtDlp(`-J --extractor-args "youtube:player_client=android,ios" --no-check-certificate "${url}"`, (error, stdout, stderr) => {
         if (error) {
             console.error('yt-dlp error:', error.message);
             console.error('Stderr:', stderr);
@@ -219,19 +219,19 @@ app.post('/api/download', (req, res) => {
     if (type === 'audio') {
         switch(quality) {
             case 'lossless':
-                args = `-f bestaudio --extract-audio --audio-format wav -o "${outputTemplate}" "${url}"`;
+                args = `-f bestaudio --extract-audio --audio-format wav --extractor-args "youtube:player_client=android" -o "${outputTemplate}" "${url}"`;
                 break;
             case '192kbps':
-                args = `-f bestaudio --extract-audio --audio-format mp3 --audio-quality 192K -o "${outputTemplate}" "${url}"`;
+                args = `-f bestaudio --extract-audio --audio-format mp3 --audio-quality 192K --extractor-args "youtube:player_client=android" -o "${outputTemplate}" "${url}"`;
                 break;
             case '128kbps':
-                args = `-f bestaudio --extract-audio --audio-format mp3 --audio-quality 128K -o "${outputTemplate}" "${url}"`;
+                args = `-f bestaudio --extract-audio --audio-format mp3 --audio-quality 128K --extractor-args "youtube:player_client=android" -o "${outputTemplate}" "${url}"`;
                 break;
             default:
-                args = `-f bestaudio --extract-audio --audio-format mp3 --audio-quality 320K -o "${outputTemplate}" "${url}"`;
+                args = `-f bestaudio --extract-audio --audio-format mp3 --audio-quality 320K --extractor-args "youtube:player_client=android" -o "${outputTemplate}" "${url}"`;
         }
     } else {
-        args = `-f "${formatId}+bestaudio/best" --merge-output-format mp4 -o "${outputTemplate}" "${url}"`;
+        args = `-f "${formatId}+bestaudio/best" --extractor-args "youtube:player_client=android" --merge-output-format mp4 -o "${outputTemplate}" "${url}"`;
     }
     
     console.log(`🎬 Downloading with args: ${args}`);
