@@ -351,6 +351,27 @@ app.post('/api/download', async (req, res) => {
     }
 });
 
+// Add this temporary debug endpoint
+app.get('/api/debug', (req, res) => {
+    exec('yt-dlp --version', (error, stdout, stderr) => {
+        if (error) {
+            return res.json({ 
+                ytdlp: 'NOT INSTALLED', 
+                error: error.message,
+                stderr: stderr 
+            });
+        }
+        
+        exec('python3 --version', (pyError, pyStdout) => {
+            res.json({
+                ytdlp: stdout.trim(),
+                python: pyStdout ? pyStdout.trim() : 'Unknown',
+                ffmpeg: 'checking...'
+            });
+        });
+    });
+});
+
 // Get download stats
 app.get('/api/stats', (req, res) => {
     res.json({
