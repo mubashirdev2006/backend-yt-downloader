@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: youtube-downloader-api
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: |
+      apt-get update
+      apt-get install -y python3 python3-pip ffmpeg
+      pip3 install --upgrade yt-dlp
+      npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 18.17.0
+    autoDeploy: true
