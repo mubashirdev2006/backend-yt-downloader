@@ -6,8 +6,10 @@ services:
     plan: free
     buildCommand: |
       apt-get update
-      apt-get install -y python3 python3-pip ffmpeg
-      pip3 install --upgrade yt-dlp
+      apt-get install -y ffmpeg wget curl python3
+      wget -O /usr/local/bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+      chmod a+rx /usr/local/bin/yt-dlp
+      yt-dlp --version
       npm install
     startCommand: node server.js
     envVars:
